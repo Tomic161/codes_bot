@@ -17,11 +17,11 @@ async def on_ready():
                             for url in SITES:
                                 codes = get_codes(url)
                                 message = await channel.fetch_message(messages[0].id)
-                                await message.edit(content = template(codes))
+                                await message.edit(content = template(codes[0], codes[1]))
                         else:
                             for url in SITES:
                                 codes = get_codes(url)
-                                await channel.send(template(codes))
+                                await channel.send(template(codes[0], codes[1]))
         await sleep(1800)
 
 
