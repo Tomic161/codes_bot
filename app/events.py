@@ -12,16 +12,16 @@ async def on_ready():
             if guild.id in ALLOW_SERVERS:
                 for channel in await guild.fetch_channels():
                     if channel.name.lower() == 'codes':
-                        if channel.last_message_id != None:
+                        messages = await channel.history(limit = 1).flatten()
+                        if messages != []:
                             for url in SITES:
                                 codes = get_codes(url)
-                                message = await channel.fetch_message(channel.last_message_id)
-                                await message.edit(content = template(codes[1], codes[0]))
+                                message = await channel.fetch_message(messages[0].id)
+                                await message.edit(content = template(codes))
                         else:
                             for url in SITES:
                                 codes = get_codes(url)
-                                await channel.send(template(codes[1], codes[0]))
-
+                                await channel.send(template(codes))
         await sleep(1800)
 
 
