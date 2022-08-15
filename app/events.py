@@ -1,6 +1,6 @@
 from app import client
-from app.config import ALLOW_SERVERS, SITES
-from app.functions import get_codes, template
+from app.config import ALLOW_SERVERS, SITES, IP
+from app.functions import get_codes, template, get_server_info
 from asyncio import sleep
 
 
@@ -22,6 +22,28 @@ async def on_ready():
                             for url in SITES:
                                 codes = get_codes(url)
                                 await channel.send(template(codes[0], codes[1]))
-        await sleep(1800)
+        server = get_server_info(IP)
+        channel = await client.fetch_channel(1008722183536779386)
+        await channel.edit(name = 'SERVER STATUS: {0}'.format(server[0]))
+        channel = await client.fetch_channel(1008722185168359485)
+        await channel.edit(name = 'ONLINE: {0}'.format(server[1]))
+        await sleep(30)
+        print('OK')
 
+@client.event
+async def on_message(msg):
+    if msg.author.id != 1003722971413749840:
+        if 'айпи' in msg.content.lower():
+            msg_reply = await msg.reply('IP: {0}'.format(IP))
+            await sleep(20)
+            await msg_reply.delete()
+            await msg.delete()
+
+
+@client.event
+async def close():
+    channel = await client.fetch_channel(1008722183536779386)
+    await channel.edit(name = 'BOT OFF')
+    channel = await client.fetch_channel(1008722185168359485)
+    await channel.edit(name = 'BOT OFF')
 

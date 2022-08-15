@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-
+import json
 
 def get_codes(url):
 	r = requests.get(url)
@@ -28,3 +28,17 @@ def template(codes, game):
 			text = text + f"\n {i + 1}. {codes[len(codes) - 1]}"
 	
 	return text + '\n'
+
+
+def get_server_info(ip, port=""):
+	r = requests.get('https://api.minetools.eu/ping/{0}/{1}'.format(ip, port))
+	data = json.loads(r.text)
+	try:
+		error = data['error']
+		status = 'Off'
+		online = '0'
+	except KeyError:
+		status = 'On'
+		online = data['players']['online']
+
+	return status, online

@@ -1,4 +1,6 @@
+import app.commands
 import app.events
+
 from app.config import TOKEN
 
 
